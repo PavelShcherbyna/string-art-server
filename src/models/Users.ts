@@ -2,26 +2,40 @@ import { Schema } from 'mongoose';
 import db from '../db/index';
 import bcrypt from 'bcryptjs';
 
+export interface IDrawing {
+  steps: number[];
+  currentIndex: number;
+  img: string;
+}
+
 export interface IUser {
   _id: any;
-  email: string;
+  // email: string;
   password: string;
+  drawnings?: IDrawing[];
 }
 
 export const UsersSchema = new Schema<IUser>(
   {
-    email: {
-      type: String,
-      required: true,
-      lowercase: true,
-      unique: true
-    },
+    // email: {
+    //   type: String,
+    //   required: true,
+    //   lowercase: true,
+    //   unique: true
+    // },
     password: {
       type: String,
       required: [true, 'Please, provide the password.'],
-      minlength: [8, 'The password must be at least 8 characters long.'],
+      minlength: [6, 'The password must be at least 6 characters long.'],
       select: false
-    }
+    },
+    drawnings: [
+      {
+        steps: Number,
+        currentIndex: Number,
+        img: String
+      }
+    ]
   },
   {
     versionKey: false,

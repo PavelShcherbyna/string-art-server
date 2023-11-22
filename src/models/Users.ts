@@ -5,14 +5,14 @@ import bcrypt from 'bcryptjs';
 export interface IDrawing {
   steps: number[];
   currentIndex: number;
-  img: string;
+  f_id: string;
 }
 
 export interface IUser {
   _id: any;
   // email: string;
   password: string;
-  drawnings?: IDrawing[];
+  drawings?: IDrawing[];
 }
 
 export const UsersSchema = new Schema<IUser>(
@@ -29,11 +29,11 @@ export const UsersSchema = new Schema<IUser>(
       minlength: [6, 'The password must be at least 6 characters long.'],
       select: false
     },
-    drawnings: [
+    drawings: [
       {
-        steps: Number,
+        steps: [Number],
         currentIndex: Number,
-        img: String
+        f_id: String
       }
     ]
   },

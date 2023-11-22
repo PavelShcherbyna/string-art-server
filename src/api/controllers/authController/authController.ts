@@ -14,12 +14,10 @@ const createSendToken = (user: IUser, statusCode: number, res: Response): void =
   res.status(statusCode).json({
     status: 'success',
     token,
-    data: {
-      user: {
-        id: user._id,
-        drawnings: user.drawnings
-        // email: user.email
-      }
+    user: {
+      id: user._id,
+      drawings: user.drawings
+      // email: user.email
     }
   });
 };

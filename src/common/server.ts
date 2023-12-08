@@ -4,13 +4,16 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { verifyToken } from '../api/middlewares/authProtectMiddleware';
 import { errorHandler } from '../api/middlewares/errorMiddleware';
+import path from 'path';
 
 const app = express();
 
 export default class ExpressServer {
   constructor() {
+    const root = path.normalize(__dirname + '/../..');
     app.use(bodyParser.json({ limit: process.env.REQUEST_LIMIT ?? '100kb' }));
 
+    app.use(express.static(`${root}/public`));
     app.use(cors());
   }
 

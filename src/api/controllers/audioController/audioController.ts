@@ -1,27 +1,41 @@
 import fs from 'fs';
 import { RequestHandler } from 'express';
 import path from 'path';
+import util from 'util';
 import { AppError } from '../../../utils/appError';
 
 const root = path.normalize(__dirname + '/../../../..');
+const audioFolderPath = path.join(root, 'public', 'audio');
+
+function normalizeName(fileName: string): string {
+  const nameWithoutExt = path.parse(fileName).name;
+
+  const regEx = /[-_]/g;
+
+  let name = nameWithoutExt.toLowerCase().replace(regEx, ' ');
+
+  return `${name.charAt(0).toUpperCase()}${name.slice(1)}`;
+}
 
 function createAudioFilePath(fileName: string): string {
   return path.join(root, 'public', 'audio', fileName);
 }
 
-const songs = [
-  {
-    name: 'Calm long song',
-    fileName: 'calm-long-song.mp3'
-  },
-  {
-    name: 'Once in Paris',
-    fileName: 'once-in-paris.mp3'
-  }
-];
-
 export const getSongsList: RequestHandler = async (req, res, next) => {
   try {
+    const songs = new Array<{ name: string; fileName: string }>();
+
+    const readdir = util.promisify(fs.readdir);
+
+    const fileNames = await readdir(audioFolderPath);
+
+    fileNames.forEach((fileName) => {
+      songs.push({
+        name: normalizeName(fileName),
+        fileName: fileName
+      });
+    });
+
     return res.status(200).json({
       status: 'success',
       songsList: songs

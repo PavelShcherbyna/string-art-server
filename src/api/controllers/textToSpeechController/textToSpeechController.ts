@@ -12,10 +12,10 @@ export const postTextToSpeech: RequestHandler = async (req, res, next) => {
     const apiKey: string = process.env.GOOGLE_TTS_API_KEY || '';
 
     const voiceNames: LangCollection = {
-      'en-US': 'en-US-Standard-D',
-      'ru-RU': 'ru-RU-Standard-D',
-      'de-DE': 'de-DE-Standard-D',
-      'it-IT': 'it-IT-Standard-C',
+      'en-US': 'en-US-Standard-E',
+      'ru-RU': 'ru-RU-Standard-A',
+      'de-DE': 'de-DE-Standard-A',
+      'it-IT': 'it-IT-Standard-A',
       'ro-RO': 'ro-RO-Standard-A'
     };
 

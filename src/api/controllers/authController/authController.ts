@@ -72,30 +72,39 @@ export const loginWithCode: RequestHandler = async (req, res, next) => {
       return next(new AppError('Please provide correct password', 400));
     }
 
-    const allUsers: IUser[] = await User.find({}, { _id: 1, password: 1 });
+    // const allUsers: IUser[] = await User.find({}, { _id: 1, password: 1 });
 
-    const usersDecrypted: IUser[] = await Promise.all(
-      allUsers.map(async function (el: IUser): Promise<IUser> {
-        return {
-          _id: el._id,
-          password: (await bcrypt.compare(password, el.password)) ? 'true' : 'false'
-        };
-      })
-    );
-    const userDecrypted: IUser | undefined = usersDecrypted.find(
-      (el) => el.password === 'true'
-    );
+    // const usersDecrypted: IUser[] = await Promise.all(
+    //   allUsers.map(async function (el: IUser): Promise<IUser> {
+    //     return {
+    //       _id: el._id,
+    //       password: (await bcrypt.compare(password, el.password)) ? 'true' : 'false'
+    //     };
+    //   })
+    // );
+    // const userDecrypted: IUser | undefined = usersDecrypted.find(
+    //   (el) => el.password === 'true'
+    // );
 
     let user;
-    if (userDecrypted) {
-      user = await User.findOne({ _id: userDecrypted._id });
-    } else {
-      user = await User.create({ password });
-    }
+
+    user = await User.findOne({ code: password });
 
     if (!user) {
-      return next(new AppError('There is some problem with login.', 401));
+      // Field `password` is deprecated and is left for backward compatibility
+      user = await User.create({ code: password, password });
     }
+    
+
+    // if (userDecrypted) {
+    //   user = await User.findOne({ _id: userDecrypted._id });
+    // } else {
+    //   user = await User.create({ password });
+    // }
+
+    // if (!user) {
+    //   return next(new AppError('There is some problem with login.', 401));
+    // }
 
     createSendToken(user as IUser, 200, res);
   } catch (err) {

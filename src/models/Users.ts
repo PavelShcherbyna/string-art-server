@@ -12,6 +12,7 @@ export interface IUser {
   _id: any;
   // email: string;
   password: string;
+  code: string;
   drawings?: IDrawing[];
 }
 
@@ -25,6 +26,13 @@ export const UsersSchema = new Schema<IUser>(
     // },
     password: {
       type: String,
+      required: [true, 'Please, provide the password.'],
+      minlength: [6, 'The password must be at least 6 characters long.'],
+      select: false
+    },
+    code: {
+      type: String,
+      unique: true,
       required: [true, 'Please, provide the password.'],
       minlength: [6, 'The password must be at least 6 characters long.'],
       select: false
